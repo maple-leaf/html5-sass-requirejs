@@ -1,0 +1,24 @@
+{
+  "name": "custom-html5-sass",
+  "version": "0.0.0",
+  "description": "custom html5-sass boileplate",
+  "keywords": [
+    "html5-sass"
+  ],
+  "authors": [
+    "tjfdfs"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "~2.6.2",
+    "pie": "~1.0.0",
+  }
+}
