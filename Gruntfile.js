@@ -46,7 +46,7 @@ module.exports = function(grunt) {
         },
       },
       img: {
-        files: ['app/img/**/*','app/sass/img/**/*'],
+        files: ['app/images/**/*','app/sass/img/**/*'],
         tasks: ['watchcontexthelper:img'],
         options: {
           nospawn: true
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
         path: 'http://localhost:<%= connect.options.port %>/dist'
       }
     },
-    
+
     sass: {
       main: {
         files: {
@@ -198,8 +198,8 @@ module.exports = function(grunt) {
       },
       img: {
         files: [
-          { expand: true, cwd: 'app/sass/img/', src: '**/*', dest: 'dist/css/img/' },
           { expand: true, cwd: 'app/img/', src: '**/*', dest: 'dist/img/' },
+          { expand: true, cwd: 'app/sass/img/', src: '**/*', dest: 'dist/css/img/' }
           // { expand: true, cwd: 'bower_components/bxslider-4/images/', src: '**/*', dest: 'dist/css/img/'},
           // { expand: true, cwd: 'bower_components/select2/', src: ['**/*.jpg','**/*.png','**/*.gif'], dest: 'dist/css/img/'},
         ],
@@ -234,10 +234,9 @@ module.exports = function(grunt) {
         options: {
           callback: function($){
             $('script').each(function(){
-            if($(this).attr('src').search('bower_components') !== -1) {
+            if($(this).attr('src') && $(this).attr('src').search('bower_components') !== -1) {
               var path= $(this).attr('src');
               $(this).attr('src', 'js/vendor' + path.substring(path.lastIndexOf('/')));
-              console.log($(this).attr('src'));
               // grunt.task.run('copy:js');
             }
             });
@@ -269,7 +268,7 @@ module.exports = function(grunt) {
         options: {
           callback: function($){
             $('script').each(function(){
-            if($(this).attr('src').search('js/vendor') !== -1) {
+            if($(this).attr('src') && $(this).attr('src').search('js/vendor') !== -1) {
               var path= $(this).attr('src');
               var name = path.substring(path.lastIndexOf('/')+1);
               if(name.search('min') === -1){
@@ -288,7 +287,7 @@ module.exports = function(grunt) {
       js: [ 'dist/js' ],
       css: [ 'dist/css' ],
       html: [ 'dist/html' ],
-      img: [ 'dist/img' ],
+      img: [ 'dist/images', 'dist/css/img' ],
       devjs: [ 'dist/js/**/*.js', '!dist/js/**/*.min.js' ],
       devcss: [ 'dist/css/**/*.css', '!dist/css/**/*.min.css' ],
     }
@@ -355,13 +354,13 @@ module.exports = function(grunt) {
         // grunt.task.run(['clean:html', 'copy:html', 'assemble:production']) :
         grunt.task.run(['useminPrepare','clean:html', 'copy:html','usemin']) :
         // grunt.task.run(['clean:html', 'copy:html', 'assemble:development']);
-        grunt.task.run(['clean:html','copy:html','updatecss','updatejs']);
+        grunt.task.run(['clean:html','copy:html','copy:img']);
         break;
       case 'sass':
         (grunt.watchcontext === 'production') ?
         grunt.task.run(['clean:css', 'sass', 'cssmin', 'clean:devcss']) :
         grunt.task.run(['clean:css', 'sass','copy:img']);
-        break; 
+        break;
     }
   });
 
@@ -379,8 +378,8 @@ module.exports = function(grunt) {
     'copy:html',
     //'assemble:production'
     'usemin',
-    'dom_munger:updatecssmin',
-    'dom_munger:updatejsmin'
+    //'dom_munger:updatecssmin',
+    //'dom_munger:updatejsmin'
   ]);
 
   grunt.registerTask('development', [
@@ -393,8 +392,8 @@ module.exports = function(grunt) {
     'copy:html',
     //'assemble:development'
     // 'usemin'
-    'dom_munger:updatecss',
-    'dom_munger:updatejs'
+    //'dom_munger:updatecss',
+    //'dom_munger:updatejs'
   ]);
 
   grunt.registerTask('dev', [
